@@ -8,6 +8,8 @@ from torchvision.datasets import EMNIST
 from torch.utils.data import ConcatDataset, Subset, DataLoader
 from torchvision.transforms import ToTensor, Compose
 from torchvision.utils import make_grid
+from torch.autograd import Variable
+from torch.utils.data.sampler import SubsetRandomSampler
 import torch
 import torch.nn as nn
 import numpy as np
@@ -66,7 +68,7 @@ def get_datasets(split='balanced', save=False):
 # TODO
 # 1. build your own CNN classifier with the given structure. DO NOT COPY OR USE ANY TRICK
 
-def train(model, loaders, optimizer, writer, n_epochs, ckpt_path, device='cpu'):
+def train_and_validate(model, loaders, optimizer, writer, n_epochs, ckpt_path, device='cpu'):
     def run_epoch(train_or_eval):
         epoch_loss = 0.
         epoch_acc = 0.
@@ -315,4 +317,4 @@ if __name__ == '__main__':
     optimizer = opt_class(scratchModel.parameters(), lr=lr)
     writer = SummaryWriter('./logs/cnn/%s' % opt_str)
 
-    train(scratchModel, dataloaders, optimizer, writer, n_epochs, ckpt_path, DEVICE)
+    train_and_validate(scratchModel, dataloaders, optimizer, writer, n_epochs, ckpt_path, DEVICE)
